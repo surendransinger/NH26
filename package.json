@@ -1,0 +1,21 @@
+{
+  "name": "rere-mail",
+  "version": "3.0.0",
+  "description": "Re Re — Read & React AI Mail — Full Stack Node.js + SQLite",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js",
+    "setup-db": "node db/setup.js"
+  },
+  "dependencies": {
+    "sql.js": "^1.10.3",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

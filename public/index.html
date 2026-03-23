@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#060809">
+<title>Re Re — Read & React AI Mail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+
+<!-- ══════════════════ LOGIN SCREEN ══════════════════ -->
+<div id="loginScreen">
+  <div class="login-backdrop"></div>
+  <div class="login-box">
+    <div class="login-topline"></div>
+    <div class="login-logo">
+      <div class="login-logo-mark">
+        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#ffffff"/>
+              <stop offset="100%" style="stop-color:#666666"/>
+            </linearGradient>
+          </defs>
+          <ellipse cx="60" cy="72" rx="46" ry="12" fill="none" stroke="url(#logoGrad)" stroke-width="3.5"/>
+          <ellipse cx="60" cy="72" rx="34" ry="8.5" fill="none" stroke="url(#logoGrad)" stroke-width="1.8" opacity="0.55"/>
+          <text x="60" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="30" fill="url(#logoGrad)" font-style="italic" letter-spacing="-1">RE RE</text>
+          <polygon points="94,26 96,33 89,31" fill="white" opacity="0.9"/>
+          <line x1="94" y1="26" x2="100" y2="18" stroke="white" stroke-width="1.8" opacity="0.9"/>
+          <line x1="94" y1="26" x2="103" y2="24" stroke="white" stroke-width="1.2" opacity="0.7"/>
+          <line x1="94" y1="26" x2="98" y2="31" stroke="white" stroke-width="1" opacity="0.5"/>
+        </svg>
+      </div>
+      <div class="login-brand-text">
+        <div class="login-brand-name">RE RE</div>
+        <div class="login-brand-tag">Read &amp; React AI Mail</div>
+      </div>
+    </div>
+    <div class="login-tabs">
+      <div class="ltab active" id="ltab-signin" onclick="switchTab('signin')">Sign In</div>
+      <div class="ltab" id="ltab-signup" onclick="switchTab('signup')">Create Account</div>
+    </div>
+    <!-- SIGN IN FORM -->
+    <div id="signinForm">
+      <div class="form-title">Welcome back</div>
+      <div class="form-subtitle">Sign in to access your AI inbox</div>
+      <div class="form-error hidden" id="signinError"></div>
+      <div class="field-wrap">
+        <label class="field-label">Email</label>
+        <input class="form-field" id="signinEmail" type="email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Password</label>
+        <input class="form-field" id="signinPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="login-submit-btn" id="signinBtn" onclick="doSignin()">
+        <span>SIGN IN</span> <span class="btn-arrow">→</span>
+      </button>
+      <div class="login-divider"><span>or continue with</span></div>
+      <button class="oauth-btn gmail" onclick="doDemo()">
+        <svg width="17" height="17" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Gmail
+      </button>
+      <button class="oauth-btn demo" onclick="doDemo()">⚡ Quick Demo — No Account Needed</button>
+    </div>
+    <!-- SIGN UP FORM -->
+    <div id="signupForm" class="hidden">
+      <div class="form-title">Create Account</div>
+      <div class="form-subtitle">Join Re Re AI Mail today</div>
+      <div class="form-error hidden" id="signupError"></div>
+      <div class="field-wrap">
+        <label class="field-label">Full Name</label>
+        <input class="form-field" id="signupName" type="text" placeholder="Your full name">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Email</label>
+        <input class="form-field" id="signupEmail" type="email" placeholder="your@email.com">
+      </div>
+      <div class="field-wrap">
+        <label class="field-label">Password</label>
+        <input class="form-field" id="signupPassword" type="password" placeholder="Min 6 characters">
+      </div>
+      <button class="login-submit-btn" id="signupBtn" onclick="doSignup()">
+        <span>CREATE ACCOUNT</span> <span class="btn-arrow">→</span>
+      </button>
+      <div class="login-divider"><span>or</span></div>
+      <button class="oauth-btn demo" onclick="doDemo()">⚡ Try Demo Instead</button>
+    </div>
+    <div class="login-footer">Re Re Mail v3.0 · Secure AI-Powered Inbox</div>
+  </div>
+</div>
+
+<!-- ══════════════════ MAIN APP ══════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- TOPBAR -->
+  <header class="topbar" id="topbar">
+    <div class="logo" onclick="switchView('inbox')">
+      <div class="logo-mark">
+        <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#fff"/><stop offset="100%" style="stop-color:#666"/></linearGradient></defs>
+          <ellipse cx="60" cy="72" rx="46" ry="12" fill="none" stroke="url(#lg2)" stroke-width="3.5"/>
+          <ellipse cx="60" cy="72" rx="34" ry="8.5" fill="none" stroke="url(#lg2)" stroke-width="1.8" opacity="0.55"/>
+          <text x="60" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="30" fill="url(#lg2)" font-style="italic" letter-spacing="-1">RE RE</text>
+          <polygon points="94,26 96,33 89,31" fill="white" opacity="0.9"/>
+          <line x1="94" y1="26" x2="100" y2="18" stroke="white" stroke-width="1.8" opacity="0.9"/>
+          <line x1="94" y1="26" x2="103" y2="24" stroke="white" stroke-width="1.2" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <div class="logo-name">RE RE</div>
+        <div class="logo-tag">read &amp; react</div>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <span class="search-icon">⌕</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search emails, people, topics… (Ctrl+K)" autocomplete="off">
+      <button class="search-voice-btn" id="searchVoiceBtn" title="Voice search">🎙</button>
+    </div>
+
+    <div class="tb-spacer"></div>
+
+    <div class="theme-picker">
+      <button class="theme-dot active" data-t="dark" onclick="setTheme('dark')" title="Dark"></button>
+      <button class="theme-dot" data-t="light" onclick="setTheme('light')" title="Light"></button>
+      <button class="theme-dot" data-t="midnight" onclick="setTheme('midnight')" title="Midnight"></button>
+      <button class="theme-dot" data-t="sepia" onclick="setTheme('sepia')" title="Sepia"></button>
+    </div>
+
+    <button class="tb-icon-btn voice-btn" id="voiceBtn" title="Voice Assistant (Ctrl+.)">🎙</button>
+    <button class="tb-icon-btn" id="calBtn" title="Calendar">📅<span class="tb-badge" id="calBadge">0</span></button>
+    <button class="tb-icon-btn" id="notifBtn" title="Notifications">🔔<span class="tb-badge" id="notifBadge">0</span></button>
+    <button class="avatar-btn" id="avatarBtn" title="Profile">JS</button>
+  </header>
+
+  <div class="main-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <button class="compose-btn" id="composeBtn">
+        <span class="compose-plus">＋</span>
+        <span class="compose-label">COMPOSE</span>
+      </button>
+
+      <nav class="nav-section">
+        <div class="nav-group-label">MAIL</div>
+        <div class="nav-item active" data-view="inbox">
+          <span class="nav-icon">📥</span>
+          <span class="nav-text">Inbox</span>
+          <span class="nav-count hot" id="nc-inbox">0</span>
+        </div>
+        <div class="nav-item" data-view="important">
+          <span class="nav-icon">⭐</span>
+          <span class="nav-text">Important</span>
+          <span class="nav-count" id="nc-important">0</span>
+        </div>
+        <div class="nav-item" data-view="starred">
+          <span class="nav-icon">☆</span>
+          <span class="nav-text">Starred</span>
+        </div>
+        <div class="nav-item" data-view="draft">
+          <span class="nav-icon">✏️</span>
+          <span class="nav-text">Drafts</span>
+          <span class="nav-count" id="nc-drafts">0</span>
+        </div>
+        <div class="nav-item" data-view="sent">
+          <span class="nav-icon">📤</span>
+          <span class="nav-text">Sent</span>
+          <span class="nav-count" id="nc-sent">0</span>
+        </div>
+        <div class="nav-item" data-view="spam">
+          <span class="nav-icon">⚠️</span>
+          <span class="nav-text">Spam</span>
+          <span class="nav-count" id="nc-spam">0</span>
+        </div>
+        <div class="nav-item" data-view="trash">
+          <span class="nav-icon">🗑</span>
+          <span class="nav-text">Trash</span>
+          <span class="nav-count" id="nc-trash">0</span>
+        </div>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-group-label">AI FEATURES</div>
+        <div class="nav-item" data-view="ai-dashboard">
+          <span class="nav-icon">◎</span>
+          <span class="nav-text">AI Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="voice-commands">
+          <span class="nav-icon">🎙</span>
+          <span class="nav-text">Voice Commands</span>
+        </div>
+      </nav>
+
+      <nav class="nav-section">
+        <div class="nav-group-label">LABELS</div>
+        <div class="nav-item" data-view="meetings">
+          <span class="nav-icon">🗓</span>
+          <span class="nav-text">Meetings</span>
+          <span class="nav-count" id="nc-meetings">0</span>
+        </div>
+        <div class="nav-item" data-view="newsletters">
+          <span class="nav-icon">📰</span>
+          <span class="nav-text">Newsletters</span>
+        </div>
+        <div class="nav-item" data-view="deadlines">
+          <span class="nav-icon">⏰</span>
+          <span class="nav-text">Deadlines</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="deadline-widget">
+          <div class="dw-title">⏰ UPCOMING DEADLINES</div>
+          <div class="dw-row"><span>Semester Fees</span><span class="dw-date">Mar 30</span></div>
+          <div class="dw-row"><span>Internship App</span><span class="dw-date">Apr 5</span></div>
+          <div class="dw-row"><span>Final Exam</span><span class="dw-date">Apr 10</span></div>
+        </div>
+        <div class="ai-stats-widget">
+          <div class="asw-title"><span class="live-dot"></span> AI ACTIVE</div>
+          <div class="asw-row"><span>Scanned</span><span class="asw-val">147</span></div>
+          <div class="asw-row"><span>Important</span><span class="asw-val" id="statImp">0</span></div>
+          <div class="asw-row"><span>Meetings</span><span class="asw-val" id="statMeet">0</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIL LIST -->
+    <section class="mail-list-panel" id="mailListPanel">
+      <div class="mlp-header">
+        <div class="mlp-top">
+          <h2 class="mlp-title" id="folderTitle">Inbox</h2>
+          <button class="analyze-all-btn" id="analyzeAllBtn">⚡ Analyze All</button>
+        </div>
+        <div class="filter-chips">
+          <button class="fchip active" data-filter="all">All</button>
+          <button class="fchip" data-filter="unread">Unread</button>
+          <button class="fchip" data-filter="important">Important</button>
+          <button class="fchip" data-filter="starred">Starred</button>
+        </div>
+      </div>
+      <div class="mail-list-scroll" id="mailListScroll">
+        <div class="list-loading" id="listLoading">
+          <div class="loading-spinner"></div>
+          <span>Loading…</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAIL PANEL -->
+    <section class="detail-panel" id="detailPanel">
+      <div class="detail-empty" id="detailEmpty">
+        <div class="de-logo">
+          <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" opacity="0.2">
+            <ellipse cx="60" cy="72" rx="46" ry="12" fill="none" stroke="currentColor" stroke-width="3.5"/>
+            <text x="60" y="62" text-anchor="middle" font-family="Arial Black,sans-serif" font-weight="900" font-size="30" fill="currentColor" font-style="italic">RE RE</text>
+          </svg>
+        </div>
+        <p class="de-text">Select a message to read</p>
+        <p class="de-hint">Or say "read inbox" to use voice assistant</p>
+      </div>
+      <div class="detail-view hidden" id="detailView">
+        <div class="detail-scroll" id="detailScroll"></div>
+      </div>
+    </section>
+
+    <!-- AI SIDEBAR -->
+    <aside class="ai-panel" id="aiPanel">
+      <div class="ai-panel-header">
+        <span class="ai-live-dot"></span>
+        <div>
+          <div class="ai-panel-title">Re Re Intelligence</div>
+          <div class="ai-panel-sub">REAL-TIME INSIGHTS</div>
+        </div>
+      </div>
+
+      <div class="ai-scroll-area" id="aiScrollArea">
+        <!-- Overview -->
+        <div class="ai-card" id="overviewCard">
+          <div class="ac-label">TODAY'S OVERVIEW</div>
+          <div class="overview-grid">
+            <div class="ov-cell"><div class="ov-num" id="ov-imp">0</div><div class="ov-label">Important</div></div>
+            <div class="ov-cell"><div class="ov-num" id="ov-meet">0</div><div class="ov-label">Meetings</div></div>
+            <div class="ov-cell"><div class="ov-num" id="ov-unr">0</div><div class="ov-label">Unread</div></div>
+            <div class="ov-cell"><div class="ov-num" id="ov-draft">0</div><div class="ov-label">Drafts</div></div>
+          </div>
+        </div>
+
+        <!-- Priority Queue -->
+        <div class="ai-card">
+          <div class="ac-label">PRIORITY QUEUE</div>
+          <div class="pq-list" id="pqList">
+            <div class="pq-row"><div class="pq-name">Sarah Chen</div><div class="pq-desc">Q4 Budget needs reply</div></div>
+            <div class="pq-row"><div class="pq-name">TechCorp Legal</div><div class="pq-desc">Contract urgent — Mar 31</div></div>
+            <div class="pq-row"><div class="pq-name">Board Office</div><div class="pq-desc">Report due Friday</div></div>
+          </div>
+        </div>
+
+        <!-- Upcoming -->
+        <div class="upcoming-card">
+          <div class="ac-label">UPCOMING</div>
+          <div class="uc-day">26</div>
+          <div class="uc-month">MARCH 2026</div>
+          <div class="uc-title">Q4 Budget Review</div>
+          <div class="uc-time">10:00 AM — 11:00 AM</div>
+          <button class="uc-add-btn" onclick="openCalendar()">+ Add to Calendar</button>
+        </div>
+
+        <p class="ai-hint-text">Select an email for AI analysis</p>
+      </div>
+
+      <div class="ai-ask-bar">
+        <input class="ai-ask-input" id="aiAskInput" type="text" placeholder="Ask Re Re anything…">
+        <button class="ai-ask-send" id="aiAskSend">➤</button>
+      </div>
+    </aside>
+
+  </div><!-- .main-layout -->
+</div><!-- #app -->
+
+<!-- FOCUS FAB -->
+<button class="focus-fab" id="focusFab">🎯 Focus Mode</button>
+
+<!-- TOAST ZONE -->
+<div class="toast-zone" id="toastZone"></div>
+
+<!-- VOICE OVERLAY -->
+<div class="voice-overlay hidden" id="voiceOverlay">
+  <div class="vo-accent-bar"></div>
+  <div class="vo-header">
+    <span class="vo-icon">🎙</span>
+    <span class="vo-title">Re Re Voice</span>
+    <button class="vo-close" onclick="stopVoice()">✕</button>
+  </div>
+  <div class="vo-wave">
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+  </div>
+  <div class="vo-transcript" id="voTranscript">Listening…</div>
+  <div class="vo-cmd" id="voCmd">Say a command…</div>
+  <div class="vo-tips">
+    <span>"read inbox"</span> · <span>"compose"</span> · <span>"reply"</span> · <span>"meetings"</span> · <span>"summary"</span>
+  </div>
+</div>
+
+<!-- ── MODALS ── -->
+
+<!-- Calendar Modal -->
+<div class="modal-overlay hidden" id="calModal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">📅 Calendar & Meetings</h3>
+      <button class="modal-close" onclick="closeModal('calModal')">✕</button>
+    </div>
+    <div id="calList" class="modal-content-area"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('calModal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Compose Modal -->
+<div class="modal-overlay hidden" id="composeModal">
+  <div class="modal-box modal-wide">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title" id="composeModalTitle">✉ New Message</h3>
+      <button class="modal-close" onclick="closeModal('composeModal')">✕</button>
+    </div>
+    <div class="compose-form">
+      <div class="compose-field-row">
+        <label>To</label>
+        <input class="compose-input" id="composeTo" type="email" placeholder="recipient@email.com">
+      </div>
+      <div class="compose-field-row">
+        <label>Cc</label>
+        <input class="compose-input" id="composeCc" type="email" placeholder="cc@email.com (optional)">
+      </div>
+      <div class="compose-field-row">
+        <label>Subject</label>
+        <input class="compose-input" id="composeSubject" type="text" placeholder="Email subject">
+      </div>
+      <textarea class="compose-body" id="composeBody" rows="9" placeholder="Write your message here…"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="saveDraftBtn">💾 Save Draft</button>
+      <button class="btn btn-ghost" onclick="closeModal('composeModal')">Cancel</button>
+      <button class="btn btn-primary" id="sendBtn">Send ➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI Response Modal -->
+<div class="modal-overlay hidden" id="aiModal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">◎ Re Re AI</h3>
+      <button class="modal-close" onclick="closeModal('aiModal')">✕</button>
+    </div>
+    <div class="ai-response-body" id="aiResponseBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('aiModal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div class="modal-overlay hidden" id="profileModal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">👤 Profile & Accounts</h3>
+      <button class="modal-close" onclick="closeModal('profileModal')">✕</button>
+    </div>
+    <div class="profile-section">
+      <div class="profile-hero">
+        <div class="profile-avatar-big" id="profileAvatar">JS</div>
+        <div>
+          <div class="profile-name" id="profileName">James Smith</div>
+          <div class="profile-email" id="profileEmail">james@rere.app</div>
+        </div>
+      </div>
+      <div class="section-label">LINKED ACCOUNTS</div>
+      <div id="linkedAccountsList"></div>
+      <div class="link-btns">
+        <button class="link-btn gmail" onclick="linkAccount('gmail','james.smith@gmail.com')">
+          <svg width="15" height="15" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          + Link Gmail
+        </button>
+        <button class="link-btn outlook" onclick="linkAccount('outlook','james@outlook.com')">
+          <span style="color:#0078d4">✉</span> + Link Outlook
+        </button>
+        <button class="link-btn yahoo" onclick="linkAccount('yahoo','james@yahoo.com')">
+          <span style="color:#6001d2">Y!</span> + Link Yahoo Mail
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-danger" onclick="doLogout()">Sign Out</button>
+      <button class="btn btn-primary" onclick="closeModal('profileModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notifications Modal -->
+<div class="modal-overlay hidden" id="notifModal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">🔔 Notifications</h3>
+      <button class="modal-close" onclick="closeModal('notifModal')">✕</button>
+    </div>
+    <div id="notifList" class="modal-content-area"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="clearAllNotifs()">Clear All</button>
+      <button class="btn btn-primary" onclick="closeModal('notifModal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Voice Commands Help -->
+<div class="modal-overlay hidden" id="voiceHelpModal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <div class="modal-header">
+      <h3 class="modal-title">🎙 Voice Commands</h3>
+      <button class="modal-close" onclick="closeModal('voiceHelpModal')">✕</button>
+    </div>
+    <div class="voice-cmds-grid" id="voiceCmdsGrid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="closeModal('voiceHelpModal')">Got it!</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/voice.js"></script>
+<script src="/js/app.js"></script>
+</body>
+</html>
