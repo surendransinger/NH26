@@ -15,6 +15,7 @@ const meetingsRoutes = require('../routes/meetings');
 const notificationsRoutes = require('../routes/notifications');
 const accountsRoutes = require('../routes/accounts');
 const labelsRoutes = require('../routes/labels');
+const aiRoutes = require('../routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 3002;
@@ -33,6 +34,7 @@ initDatabase().then(({ db, hashPass, genToken }) => {
   app.use('/api/notifications', auth, notificationsRoutes(db));
   app.use('/api/accounts', auth, accountsRoutes(db));
   app.use('/api/labels', auth, labelsRoutes(db));
+  app.use('/api/ai', auth, aiRoutes(db));
 
   // FRONTEND
   app.get('*', (req, res) => {

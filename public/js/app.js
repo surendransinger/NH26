@@ -139,6 +139,11 @@ const App = (() => {
     setTimeout(() => toast(`👋 Welcome, ${(user.name || 'User').split(' ')[0]}!`, 't-success'), 400);
     setTimeout(() => { if (stats.inbox_unread > 0) toast(`📬 ${stats.inbox_unread} unread emails awaiting you`, 't-acc'); }, 1400);
     setTimeout(() => toast('⏰ Deadline: Semester fees due March 30', 't-acc'), 2800);
+
+    const voiceAlways = localStorage.getItem('rere_voice_always_on') === 'true';
+    if (voiceAlways) {
+      Voice.enableAlwaysOn(true);
+    }
   }
 
   // ── STATS ──
@@ -650,19 +655,33 @@ const App = (() => {
         <div class="linked-account-row">
           <div class="la-icon" style="background:rgba(66,133,244,0.1)">📧</div>
           <div class="la-info">
-            <div class="la-name">${a.provider === 'gmail' ? 'Gmail' : a.provider === 'outlook' ? 'Outlook' : 'Mail'}</div>
+            <div class="la-name">${a.provider === 'gmail' ? 'Gmail' : a.provider === 'outlook' ? 'Outlook' : 'Mail'} ${a.is_primary ? '(Primary)' : ''}</div>
             <div class="la-addr">${esc(a.provider_email)}</div>
           </div>
-          <span class="la-badge connected">${a.status}</span>
+          <div class="la-actions">
+            <button class="btn btn-ghost" onclick="App.linkAccount('${a.provider}', '${a.provider_email}', '${a.provider_user_id || ''}', true)">Set Primary</button>
+            <button class="btn btn-danger" onclick="App.unlinkAccount(${a.id})">Unlink</button>
+          </div>
         </div>`).join('');
     }
+
+    const alwaysOn = localStorage.getItem('rere_voice_always_on') === 'true';
+    const voiceStatusEl = $('voiceStatusText');
+    const voiceBtnEl = $('voiceAlwaysBtn');
+    if (voiceStatusEl) voiceStatusEl.textContent = alwaysOn ? 'EDITH always-on voice is enabled.' : 'EDITH always-on voice is off.';
+    if (voiceBtnEl) {
+      voiceBtnEl.textContent = alwaysOn ? 'Disable EDITH' : 'Enable EDITH';
+      voiceBtnEl.classList.toggle('btn-danger', alwaysOn);
+      voiceBtnEl.classList.toggle('btn-primary', !alwaysOn);
+    }
+
     $('profileModal').classList.remove('hidden');
   }
 
-  async function linkAccount(provider, email) {
+  async function linkAccount(provider, email, provider_user_id = '', is_primary = false) {
     try {
-      await API.linkAccount(provider, email);
-      toast(`✅ ${provider} linked!`, 't-success');
+      await API.linkAccount({ provider, provider_email: email, provider_user_id, is_primary });
+      toast(`✅ ${provider} linked${is_primary ? ' as primary' : ''}!`, 't-success');
       // Reopen profile to show linked account
       openProfile();
       // Open real mail service
@@ -673,24 +692,54 @@ const App = (() => {
     }
   }
 
+  async function unlinkAccount(id) {
+    try {
+      await API.unlinkAccount(id);
+      toast('✅ Account unlinked', 't-success');
+      openProfile();
+    } catch (e) {
+      toast('Failed to unlink account', 't-err');
+    }
+  }
+
+  function toggleVoiceAlwaysOn() {
+    const enabled = localStorage.getItem('rere_voice_always_on') !== 'true';
+    Voice.enableAlwaysOn(enabled);
+    openProfile();
+  }
+
   // ── AI QUERY ──
   async function handleAIQuery(query, fromVoice = false) {
-    const lq = query.toLowerCase();
-    let ans = '';
-    const s = stats;
+    try {
+      const result = await API.aiQuery(query);
+      const reply = result.reply || 'Sorry, I could not process that request.';
+      showAIResponse(query, reply);
+      if (fromVoice) Voice.speak(reply);
 
-    if (lq.includes('meet')) ans = `${s.meetings || 0} meetings synced. ${meetingsList[0] ? `Next: ${meetingsList[0].title} on ${meetingsList[0].date} at ${meetingsList[0].start_time}.` : 'No meetings synced yet.'}`;
-    else if (lq.includes('deadline') || lq.includes('due')) ans = 'Upcoming deadlines: Semester Fees (Mar 30), Internship Application (Apr 5), Final Exam (Apr 10).';
-    else if (lq.includes('spam')) ans = `${s.spam || 0} spam emails detected and filtered.`;
-    else if (lq.includes('summary') || lq.includes('today') || lq.includes('brief')) ans = `Today: ${s.inbox_unread || 0} unread emails, ${s.important || 0} important, ${s.meetings || 0} meetings, ${s.draft_count || 0} drafts.`;
-    else if (lq.includes('important')) ans = `${s.important || 0} important emails. ${mailList.find(m=>m.is_important)?.subject || ''}`;
-    else if (lq.includes('unread')) ans = `${s.inbox_unread || 0} unread emails in inbox.`;
-    else if (lq.includes('draft')) ans = `${s.draft_count || 0} drafts saved.`;
-    else if (lq.includes('sent')) ans = `${s.sent_count || 0} emails in sent folder.`;
-    else ans = `You have ${s.inbox_unread || 0} unread emails and ${s.important || 0} important items. ${s.meetings || 0} meetings synced. ${mailList[0] ? `Latest: "${mailList[0].subject}" from ${mailList[0].sender_name}.` : ''}`;
+      // Optional action from AI endpoint
+      if (result.context?.actions) {
+        result.context.actions.forEach(action => {
+          if (action.type === 'openView') switchView(action.view);
+        });
+      }
+    } catch (e) {
+      const lq = query.toLowerCase();
+      let ans = '';
+      const s = stats;
 
-    showAIResponse(query, ans);
-    if (fromVoice) Voice.speak(ans);
+      if (lq.includes('meet')) ans = `${s.meetings || 0} meetings synced. ${meetingsList[0] ? `Next: ${meetingsList[0].title} on ${meetingsList[0].date} at ${meetingsList[0].start_time}.` : 'No meetings synced yet.'}`;
+      else if (lq.includes('deadline') || lq.includes('due')) ans = 'Upcoming deadlines: Semester Fees (Mar 30), Internship Application (Apr 5), Final Exam (Apr 10).';
+      else if (lq.includes('spam')) ans = `${s.spam || 0} spam emails detected and filtered.`;
+      else if (lq.includes('summary') || lq.includes('today') || lq.includes('brief')) ans = `Today: ${s.inbox_unread || 0} unread emails, ${s.important || 0} important, ${s.meetings || 0} meetings, ${s.draft_count || 0} drafts.`;
+      else if (lq.includes('important')) ans = `${s.important || 0} important emails. ${mailList.find(m=>m.is_important)?.subject || ''}`;
+      else if (lq.includes('unread')) ans = `${s.inbox_unread || 0} unread emails in inbox.`;
+      else if (lq.includes('draft')) ans = `${s.draft_count || 0} drafts saved.`;
+      else if (lq.includes('sent')) ans = `${s.sent_count || 0} emails in sent folder.`;
+      else ans = `You have ${s.inbox_unread || 0} unread emails and ${s.important || 0} important items. ${s.meetings || 0} meetings synced. ${mailList[0] ? `Latest: "${mailList[0].subject}" from ${mailList[0].sender_name}.` : ''}`;
+
+      showAIResponse(query, ans);
+      if (fromVoice) Voice.speak(ans);
+    }
   }
 
   function showAIResponse(title, body) {

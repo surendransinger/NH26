@@ -133,10 +133,29 @@ const Voice = (() => {
       App.toast('Voice assistant off');
     } else {
       voiceEnabled = true;
+      continuous = false;
       startListening();
       speak('Re Re voice assistant activated. How can I help you?');
       App.toast('🎙 Voice assistant ON — Say a command!', 't-voice');
     }
+  }
+
+  function enableAlwaysOn(enabled) {
+    continuous = !!enabled;
+    voiceEnabled = !!enabled;
+    localStorage.setItem('rere_voice_always_on', enabled ? 'true' : 'false');
+    if (enabled) {
+      if (!isListening) startListening();
+      speak('EDITH mode enabled. I am always listening for commands.');
+      App.toast('✅ EDITH always-on voice mode active', 't-voice');
+    } else {
+      stopListening();
+      App.toast('🔕 EDITH always-on voice mode disabled', 't-voice');
+    }
+  }
+
+  function isAlwaysOn() {
+    return continuous && voiceEnabled;
   }
 
   // ── COMMAND PROCESSOR ──
@@ -146,6 +165,14 @@ const Voice = (() => {
     const mails = App.getMailList();
     const selectedMail = App.getSelectedMail();
     const stats = App.getCurrentStats();
+
+    // ─ EDITH Activation — always-on mode ─
+    if (cmd.match(/\b(edith|iron man|tony stark)\b/)) {
+      Voice.enableAlwaysOn(true);
+      say('EDITH mode activated. Always listening.');
+      App.toast('🕶️ EDITH voice mode enabled', 't-voice');
+      return;
+    }
 
     // ─ Navigation ─
     if (cmd.match(/\b(open|show|go to|navigate to)?\s*(inbox|in box)\b/)) {

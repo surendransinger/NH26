@@ -133,6 +133,7 @@ Activate voice assistant by clicking 🎙 or pressing **Ctrl+.**
 | "dark/light/midnight/sepia theme" | Changes theme |
 | "stop" | Stops TTS |
 | "help" | Shows all commands |
+| "edith" or "iron man" | Enable EDITH always-on assistant |
 
 ---
 

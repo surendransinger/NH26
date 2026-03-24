@@ -62,8 +62,13 @@ const API = (() => {
     clearNotifications: () => req('DELETE', '/notifications'),
 
     // ── Accounts ──
-    getLinkedAccounts: () => req('GET', '/linked-accounts'),
-    linkAccount: (provider, email) => req('POST', '/accounts/link', { provider, provider_email: email }),
+    getLinkedAccounts: () => req('GET', '/accounts'),
+    linkAccount: (payload) => req('POST', '/accounts/link', payload),
+    unlinkAccount: (id) => req('DELETE', '/accounts/unlink/' + id),
+    syncAccount: (id) => req('POST', '/accounts/sync/' + id),
+
+    // ── AI ──
+    aiQuery: (text) => req('POST', '/ai/query', { query: text }),
 
     // ── Labels ──
     getLabels: () => req('GET', '/labels'),

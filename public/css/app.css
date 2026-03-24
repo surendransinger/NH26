@@ -397,6 +397,8 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .link-btns{display:flex;flex-direction:column;gap:5px;margin-top:10px}
 .link-btn{background:var(--g1);border:1px solid var(--b2);border-radius:8px;padding:9px 12px;font-size:0.78rem;color:var(--t1);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:8px}
 .link-btn:hover{background:var(--g2);color:var(--t0);border-color:var(--b3)}
+.voice-control-row{margin-top:12px;display:flex;align-items:center;gap:10px;justify-content:space-between}
+.voice-control-row > div{font-size:0.8rem;color:var(--t2)}
 /* Voice help */
 .voice-cmds-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 22px 14px;max-height:60vh;overflow-y:auto}
 .vcmd-card{background:var(--g0);border:1px solid var(--b0);border-radius:8px;padding:9px 10px}
