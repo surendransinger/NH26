@@ -678,6 +678,28 @@ const App = (() => {
     $('profileModal').classList.remove('hidden');
   }
 
+  function updateVoiceStatus() {
+    const alwaysOn = localStorage.getItem('rere_voice_always_on') === 'true';
+    const voiceStatusEl = $('voiceStatusText');
+    const voiceBtnEl = $('voiceAlwaysBtn');
+    if (voiceStatusEl) voiceStatusEl.textContent = alwaysOn ? 'EDITH always-on voice is enabled.' : 'EDITH always-on voice is off.';
+    if (voiceBtnEl) {
+      voiceBtnEl.textContent = alwaysOn ? 'Disable EDITH' : 'Enable EDITH';
+      voiceBtnEl.classList.toggle('btn-danger', alwaysOn);
+      voiceBtnEl.classList.toggle('btn-primary', !alwaysOn);
+    }
+  }
+
+  function toggleVoiceAlwaysOn() {
+    const enabled = localStorage.getItem('rere_voice_always_on') !== 'true';
+    Voice.enableAlwaysOn(enabled);
+    localStorage.setItem('rere_voice_always_on', enabled ? 'true' : 'false');
+    updateVoiceStatus();
+    openProfile();
+  }
+
+  }
+
   async function linkAccount(provider, email, provider_user_id = '', is_primary = false) {
     try {
       await API.linkAccount({ provider, provider_email: email, provider_user_id, is_primary });
